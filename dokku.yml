@@ -100,7 +100,7 @@
     - name: Check if DNAnalyzer postgres link exists
       community.docker.docker_container_exec:
         container: dokku
-        command: dokku postgres:exists dnanalyzer
+        command: dokku postgres:links dnanalyzer
       register: pg_link_exists
       changed_when: false
       failed_when: pg_link_exists.rc > 1
@@ -130,7 +130,7 @@
       #  - name: Check if gtn-slack-bot postgres link exists
       #    community.docker.docker_container_exec:
       #      container: dokku
-      #      command: dokku postgres:exists gtn-slack-bot
+      #      command: dokku postgres:links gtn-slack-bot
       #    register: pg_link_exists
       #    changed_when: false
       #    failed_when: pg_link_exists.rc > 1
@@ -142,9 +142,3 @@
       #    changed_when: "'gtn-slack-bot' not in pg_link_exists.stdout"
       #    when: "'gtn-slack-bot' not in pg_link_exists.stdout"
 
-
-    # - name: Clones
-    #   dokku_clone:
-    #     app: oembed
-    #     repository: https://github.com/galaxyproject/oembed
-    #     version: main
