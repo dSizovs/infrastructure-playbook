@@ -7,7 +7,6 @@ http:
       service: cvmfs-stratum0
       entryPoints:
         - web
-
 tcp:
   routers:
     cvmfs-stratum0-rsync:
