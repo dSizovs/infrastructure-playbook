@@ -21,15 +21,17 @@
         fstype: xfs
         state: mounted
         opts: defaults
-        # - name: Install Docker
-        #   ansible.builtin.include_role:
-        #     name: geerlingguy.docker
-    # Create a symlink in /var/lib/docker to /data/docker
-    - name: Create a symlink in /var/lib/docker to /data/docker
-      file:
-        src: /var/lib/docker
-        dest: /data/docker
-        state: link
+    - name: Set root for Containerd
+      ansible.builtin.lineinfile:
+        path: /etc/containerd/config.toml
+        line: 'root = "/data/containerd"'
+        search_string: "root ="
+      notify: Restart Containerd
+  handlers:
+    - name: Restart Containerd
+      ansible.builtin.systemd_service:
+        name: containerd
+        state: restarted
   roles:
     - hostname
     - dokku_bot.ansible_dokku
@@ -62,7 +64,7 @@
       loop: "{{ apps | flatten(levels=1) }}"
       loop_control:
         index_var: idx
-      when: domain_results.results[idx].rc == 0 and not "item.apps.galaxyproject.eu" in domain_results.results[idx].stderr
+      when: domain_results.results[idx].rc == 0 and not item + ".apps.galaxyproject.eu" in domain_results.results[idx].stderr
 
     - name: Get ptdk env variable
       community.docker.docker_container_exec:
