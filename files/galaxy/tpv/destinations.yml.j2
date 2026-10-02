@@ -472,6 +472,7 @@ destinations:
       TMPDIR: $_GALAXY_JOB_TMP_DIR
     params:
       jobs_directory: /home/fr/fr_ds722/pulsar/jobs_directory
+      submit_native_specification: "--partition=milan --nodes=1 --ntasks-per-node=1 --cpus-per-task={max(int(cores), -(-round(mem * 10) // 38))} --mem-per-cpu=3800M --time=4-0 -J pulsar_eu_j{job.id}"
       singularity_enabled: true
       singularity_command: apptainer
       singularity_volumes: "$job_directory:rw,$tool_directory:ro,$job_directory/outputs:rw,$working_directory:rw,/cvmfs/data.galaxyproject.org:ro"
